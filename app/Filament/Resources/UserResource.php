@@ -51,10 +51,11 @@ class UserResource extends Resource implements HasShieldPermissions
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('roles.name')
+                    ->badge()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->date(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->date()
             ])
             ->filters([
                 //

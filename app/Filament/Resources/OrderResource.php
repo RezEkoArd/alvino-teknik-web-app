@@ -67,7 +67,7 @@ class OrderResource extends Resource implements HasShieldPermissions
                 Forms\Components\DatePicker::make('jadwal_kunjungan')
                     ->required(),
                 Forms\Components\TextInput::make('total_price')
-                    ->required()
+                    ->readOnly()
                     ->prefix('Rp.')
                     ->numeric(),
                 Forms\Components\Select::make('status')
@@ -77,6 +77,7 @@ class OrderResource extends Resource implements HasShieldPermissions
                         'complete' => 'Complete',
                     ])
                     ->default('ordering')
+                    ->hidden(fn () => Auth::user()->hasRole('panel_user'))
                     ->required(),
             ]);
     }
@@ -84,6 +85,27 @@ class OrderResource extends Resource implements HasShieldPermissions
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(function (Builder $query) {
+                $isCust = Auth::user()->hasRole('panel_user');
+                $isTeknisi = Auth::user()->hasRole('Teknisi');
+
+                if ($isCust){
+                    $userName = Auth::user()->name;
+                    $query->where('name', $userName);
+                }
+
+                if ($isTeknisi){
+                    $userId = Auth::user()->id;
+                    $query->where('teknisi_id', $userId);
+                }
+
+                // if ($isTeknisi){
+                //     $teknisiName = Auth::user()->name;
+                //     $query->where('status', 'selesai periksa')->orWhere('status','obat sudah di serahkan');
+                // }
+
+
+            })
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama Pelanggan')
