@@ -88,16 +88,15 @@ class UserResource extends Resource implements HasShieldPermissions
     public static function getPermissionPrefixes(): array
     {
         return [
-           'view',
+            'view',
             'view_any',
             'create',
             'update',
             'delete',
             'delete_any',
-            'publish'
-
         ];
     }
+    
 
 
 }

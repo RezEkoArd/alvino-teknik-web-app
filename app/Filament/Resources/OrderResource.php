@@ -16,9 +16,11 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Repeater;
 use Auth;
+use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
 
 
-class OrderResource extends Resource
+
+class OrderResource extends Resource implements HasShieldPermissions
 {
     protected static ?string $model = Order::class;
 
@@ -214,5 +216,17 @@ class OrderResource extends Resource
         },0);
 
         $set('total_price', $total);
+    }
+
+    public static function getPermissionPrefixes(): array
+    {
+        return [
+            'view',
+            'view_any',
+            'create',
+            'update',
+            'delete',
+            'delete_any',
+        ];
     }
 }
