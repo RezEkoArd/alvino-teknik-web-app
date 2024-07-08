@@ -13,6 +13,10 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
+// Export
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+
+
 
 
 class ServiceResource extends Resource implements HasShieldPermissions
@@ -36,7 +40,7 @@ class ServiceResource extends Resource implements HasShieldPermissions
                 Forms\Components\TextInput::make('price')
                     ->required()
                     ->numeric()
-                    ->prefix('$'),
+                    ->prefix('Rp.'),
             ]);
     }
 
@@ -70,6 +74,7 @@ class ServiceResource extends Resource implements HasShieldPermissions
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make(),
                 ]),
             ]);
     }

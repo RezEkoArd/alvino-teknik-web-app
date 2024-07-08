@@ -17,6 +17,8 @@ use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Repeater;
 use Auth;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+
 
 
 
@@ -110,19 +112,22 @@ class OrderResource extends Resource implements HasShieldPermissions
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama Pelanggan')
                     ->searchable(),
-                // Tables\Columns\TextColumn::make('alamat')
-                //     ->searchable(),
+                Tables\Columns\TextColumn::make('alamat')
+                    ->hidden(),
                 Tables\Columns\TextColumn::make('phone')
-                    ->searchable(),
-                // Tables\Columns\TextColumn::make('brand_ac')
-                //     ->searchable(),
+                    ->hidden(),
+                Tables\Columns\TextColumn::make('brand_ac')
+                    ->hidden(),
                 Tables\Columns\TextColumn::make('teknisi.name')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('teknisi.phone')
                     ->label('Teknisi Phone')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('jadwal_kunjungan')
                     ->date('l, d F Y')
+                    ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('total_price')
                     ->numeric()
@@ -130,20 +135,15 @@ class OrderResource extends Resource implements HasShieldPermissions
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
+                    ->sortable()
                     ->color(fn (string $state): string => match ($state) {
                         'ordering' => 'primary',
                         'prosessing' => 'warning',
                         'complete' => 'success',
-                    })
-                    ->searchable(),
+                    }),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -154,6 +154,7 @@ class OrderResource extends Resource implements HasShieldPermissions
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()
                 ]),
             ]);
     }

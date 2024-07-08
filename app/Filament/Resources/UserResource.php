@@ -14,6 +14,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Hash;
 use BezhanSalleh\FilamentShield\Contracts\HasShieldPermissions;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+
 
 
 class UserResource extends Resource implements HasShieldPermissions
@@ -73,6 +75,7 @@ class UserResource extends Resource implements HasShieldPermissions
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make(),
                 ]),
             ]);
     }
